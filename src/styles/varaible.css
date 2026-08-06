@@ -1,0 +1,10 @@
+:root {
+  --primary-color: #2f80ed;
+  --secondary-color: #1f2937;
+  --text-color: #111827;
+  --white: #ffffff;
+  --background-color: #ffffff;
+  --border-color: #e5e7eb;
+  --container-width: 1200px;
+  --border-radius: 8px;
+}
