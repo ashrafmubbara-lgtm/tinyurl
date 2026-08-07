@@ -7,6 +7,8 @@ function Home() {
 
   const [longUrl, setLongUrl] = useState("");
   const [shortURL, setShortURL] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
 
 
   const shortenURL = async () => {
@@ -18,6 +20,8 @@ function Home() {
 
 
     try {
+
+      setLoading(true);
 
       const response = await axios.post(
         "https://mvc1-production.up.railway.app/save",
@@ -35,9 +39,31 @@ function Home() {
       console.log(error);
       alert("Error creating short URL");
 
+    } finally {
+
+      setLoading(false);
+
     }
 
   };
+
+
+
+  const copyURL = () => {
+
+    navigator.clipboard.writeText(shortURL);
+
+    setCopied(true);
+
+
+    setTimeout(()=>{
+
+      setCopied(false);
+
+    },2000);
+
+  };
+
 
 
   return (
@@ -47,8 +73,6 @@ function Home() {
 
       <Navbar />
 
-
-      {/* HERO SECTION */}
 
 
       <section className="flex flex-col md:flex-row items-center justify-between px-6 md:px-20 py-20 gap-10">
@@ -75,7 +99,6 @@ function Home() {
             You can use branded domains for fully custom links,
             track link analytics, and enjoy other powerful features.
           </p>
-
 
 
 
@@ -123,11 +146,6 @@ function Home() {
 
 
 
-
-        {/* SHORTENER BOX */}
-
-
-
         <div className="md:w-1/2">
 
 
@@ -153,9 +171,7 @@ function Home() {
               </button>
 
 
-
             </div>
-
 
 
 
@@ -165,7 +181,6 @@ function Home() {
               Long URL
 
             </label>
-
 
 
 
@@ -186,18 +201,36 @@ function Home() {
 
 
 
-
             <button
 
               onClick={shortenURL}
 
-              className="mt-6 w-full bg-[#19b6ff] text-white py-3 rounded-lg"
+              disabled={loading}
+
+              className="mt-6 w-full bg-[#19b6ff] text-white py-3 rounded-lg flex justify-center items-center gap-3"
 
             >
 
-              Shorten Link
+              {
+                loading ? (
+
+                  <>
+                    <span className="w-5 h-5 border-4 border-white border-t-transparent rounded-full animate-spin"></span>
+
+                    Creating...
+
+                  </>
+
+                ) : (
+
+                  "Shorten Link"
+
+                )
+              }
+
 
             </button>
+
 
 
 
@@ -216,17 +249,42 @@ function Home() {
 
 
 
-                  <input
 
-                    type="text"
+                  <div className="flex gap-3">
 
-                    value={shortURL}
 
-                    readOnly
+                    <input
 
-                    className="w-full border p-3 rounded-lg text-black"
+                      type="text"
 
-                  />
+                      value={shortURL}
+
+                      readOnly
+
+                      className="flex-1 border p-3 rounded-lg text-black"
+
+                    />
+
+
+
+                    <button
+
+                      onClick={copyURL}
+
+                      className="bg-[#0056b3] text-white px-5 rounded-lg"
+
+                    >
+
+                      {
+                        copied ? "Copied!" : "Copy"
+                      }
+
+
+                    </button>
+
+
+                  </div>
+
 
 
                 </div>
@@ -240,7 +298,6 @@ function Home() {
 
 
         </div>
-
 
 
       </section>
@@ -295,6 +352,7 @@ function Home() {
 
 
       </section>
+
 
 
 
@@ -365,6 +423,7 @@ function Home() {
 
 
 
+
       {/* CTA */}
 
 
@@ -415,6 +474,8 @@ function Home() {
 
 
 
+
+
       <Footer />
 
 
@@ -426,6 +487,7 @@ function Home() {
 
 
 }
+
 
 
 
@@ -476,6 +538,7 @@ function FeatureCard({title,image,text}) {
 
 
 }
+
 
 
 
